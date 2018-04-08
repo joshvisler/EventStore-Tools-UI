@@ -46,6 +46,8 @@ import { Login } from './login/login.component';
 import { Configuration } from './app.constants';
 import { AuthGuard } from './auth.guard';
 import { Register } from './register/register.component';
+import { Home } from './home/home.component';
+
 const appRoutes : Routes = [
   {
     path:'login', component:Login
@@ -53,13 +55,17 @@ const appRoutes : Routes = [
   {
     path:'register', component:Register
   },
+  {
+    path:'home', component:Home
+  }
 ]
 
 @NgModule({
   declarations: [
     AppComponent,
     Login,
-    Register
+    Register,
+    Home
   ],
   imports: [
     CdkTableModule,
