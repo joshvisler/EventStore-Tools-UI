@@ -39,13 +39,27 @@ import {
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import {HttpClientModule, HttpClient} from '@angular/common/http';
 import { CdkTableModule } from '@angular/cdk/table';
-
+import { RouterModule, Routes } from '@angular/router';
+import { Login } from './login/login.component';
+import { Configuration } from './app.constants';
+import { AuthGuard } from './auth.guard';
+import { Register } from './register/register.component';
+const appRoutes : Routes = [
+  {
+    path:'login', component:Login
+  },
+  {
+    path:'register', component:Register
+  },
+]
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    Login,
+    Register
   ],
   imports: [
     CdkTableModule,
@@ -85,9 +99,10 @@ import { CdkTableModule } from '@angular/cdk/table';
     FormsModule,
     MatNativeDateModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule, 
+    RouterModule.forRoot(appRoutes)
   ],
-  providers: [],
+  providers: [Configuration, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

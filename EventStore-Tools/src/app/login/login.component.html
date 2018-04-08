@@ -1,0 +1,20 @@
+<div class="login-space">
+    <mat-card class="z-depth login-card">
+       <form class="login-form">
+         <img mat-card-image src="../assets/img/eventstore-tools.png">
+         <mat-form-field class="input-field">
+          <input  matInput type="text" placeholder="Enter your login" name="login" [(ngModel)]="userLogin"/>
+          </mat-form-field>
+          <mat-form-field class="input-field" >
+            <input  name="password" [(ngModel)]="password" matInput placeholder="Enter your password" [type]="hide ? 'password' : 'text'">
+            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+          </mat-form-field>
+          <section class="section-confirm">
+            <button mat-raised-button color="primary" (click)="login()">Login</button>
+          </section>
+          <section class="section-help">
+            <a class="flex-item" routerLink="/register">Don't have an Account?</a>
+        </section>
+      </form>
+    </mat-card>
+  </div>
