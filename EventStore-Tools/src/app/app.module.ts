@@ -47,6 +47,7 @@ import { Configuration } from './app.constants';
 import { AuthGuard } from './auth.guard';
 import { Register } from './register/register.component';
 import { Home } from './home/home.component';
+import { Search } from './search/search.component';
 
 const appRoutes : Routes = [
   {
@@ -65,7 +66,8 @@ const appRoutes : Routes = [
     AppComponent,
     Login,
     Register,
-    Home
+    Home,
+    Search
   ],
   imports: [
     CdkTableModule,

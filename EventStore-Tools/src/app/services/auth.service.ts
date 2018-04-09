@@ -1,12 +1,8 @@
 import { Injectable } from '@angular/core'
-import { HttpClient } from '@angular/common/http'
-import { HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Configuration } from '../app.constants';
-import { UserAuth } from '../models/user.auth.interface';
 import { BehaviorSubject } from 'rxjs';
 import { AuthResult } from '../models/auth.result.model';
-import { Token } from '@angular/compiler';
-import 'rxjs/add/operator/map'
 import { Observable } from 'rxjs/Observable';
 import { ValidationErrors } from '@angular/forms';
 import { User } from '../models/user.model';

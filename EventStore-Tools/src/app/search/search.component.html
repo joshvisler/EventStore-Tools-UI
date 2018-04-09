@@ -1,0 +1,80 @@
+<div class="search-space">
+    <mat-card class="z-depth search-card">
+        <form class="example-form">
+            <mat-form-field class="input-text connectionstring">
+                <mat-select placeholder="Connection" [(ngModel)]="connectionId" name="connection">
+                  <mat-option *ngFor="let connection of connections" [value]="connection.connectionId">
+                    {{ connection.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+            <mat-form-field class="input-text streamid">
+                <input matInput placeholder="StreamId" name="streamid" [(ngModel)]="streamId">
+            </mat-form-field>
+
+            <mat-form-field class="input-text streamid">
+              <input matInput placeholder="data" name="data" [(ngModel)]="data">
+            </mat-form-field>
+            <mat-form-field class="input-text streamid">
+              <input matInput placeholder="eventNumber" name="eventNumber" [(ngModel)]="eventNumber">
+            </mat-form-field>
+            <br/>
+            <mat-form-field>
+                <input matInput [matDatepicker]="from" placeholder="Angular forms"  (dateChange)="setFrom($event.target.value)">
+                <mat-datepicker-toggle matSuffix [for]="from"></mat-datepicker-toggle>
+                <mat-datepicker #from></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput [matDatepicker]="to" placeholder="Angular forms"  (dateChange)="setTo($event.target.value)">
+                <mat-datepicker-toggle matSuffix [for]="to"></mat-datepicker-toggle>
+                <mat-datepicker #to></mat-datepicker>
+            </mat-form-field>
+
+            <button mat-raised-button color="primary" class="confirm" (click)="search()">Search</button>
+          </form>
+
+          <mat-table #table [dataSource]="dataSource">
+              
+                  <ng-container matColumnDef="streamId">
+                    <mat-header-cell *matHeaderCellDef> streamId </mat-header-cell>
+                    <mat-cell *matCellDef="let event"> {{event.streamId}} </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="dateCreated">
+                      <mat-header-cell *matHeaderCellDef> dateCreated </mat-header-cell>
+                      <mat-cell *matCellDef="let event"> {{event.dateCreated}} </mat-cell>
+                    </ng-container>
+              
+                  <ng-container matColumnDef="type">
+                    <mat-header-cell *matHeaderCellDef> type </mat-header-cell>
+                    <mat-cell *matCellDef="let event"> {{event.type}} </mat-cell>
+                  </ng-container>
+              
+                  <ng-container matColumnDef="eventNumber">
+                    <mat-header-cell *matHeaderCellDef> eventNumber </mat-header-cell>
+                    <mat-cell *matCellDef="let event"> {{event.eventNumber}} </mat-cell>
+                  </ng-container>
+              
+                                
+                  <ng-container matColumnDef="data">
+                      <mat-header-cell *matHeaderCellDef> data </mat-header-cell>
+                      <mat-cell *matCellDef="let event"> {{event.data}} </mat-cell>
+                    </ng-container>
+  
+                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              
+                </mat-table>
+
+                <mat-paginator #paginator
+                  [length]="lenght"
+                  [pageSize]="10"
+                  [pageSizeOptions]="[5, 10, 25, 100]"
+                  showFirstLastButtons
+                  (page)="handlePaginator($event)">
+                </mat-paginator>
+         
+     </mat-card>
+</div>
