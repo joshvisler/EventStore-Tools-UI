@@ -21,17 +21,14 @@ export class Login {
     login(){
         this.authService.login(this.userLogin, this.password)
             .subscribe(
-                (data: boolean) => 
-                {
-                    this.isAuth = data
-
-                    if(this.isAuth == true)
+                res=>{
+                    if(res== true)
                     {
-                        console.info(this.isAuth);
-                        this.router.navigate(['register']);
+                        this.authService.setLogginIn(true);
+                        this.router.navigate(['home']);
                     }
-                },
-                error => console.log(error)
+                }
             );
+                
     }
 }

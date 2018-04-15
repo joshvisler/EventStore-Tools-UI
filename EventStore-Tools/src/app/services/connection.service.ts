@@ -12,6 +12,7 @@ export class ConnectionService{
     private baseApiAddres : string;
 
     constructor(private http: HttpClient, private _configuration: Configuration){
+        
         this.baseApiAddres = _configuration.ServerWithApiUrl + '/connection';
      }
 

@@ -39,7 +39,7 @@ import {
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {HttpClientModule, HttpClient} from '@angular/common/http';
+import {HttpClientModule, HttpClient, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { CdkTableModule } from '@angular/cdk/table';
 import { RouterModule, Routes } from '@angular/router';
 import { Login } from './login/login.component';
@@ -48,6 +48,8 @@ import { AuthGuard } from './auth.guard';
 import { Register } from './register/register.component';
 import { Home } from './home/home.component';
 import { Search } from './search/search.component';
+import { AuthService } from './services/auth.service';
+import { TokenInterceptor } from './services/refreshtoken.inspector';
 
 const appRoutes : Routes = [
   {
@@ -57,7 +59,8 @@ const appRoutes : Routes = [
     path:'register', component:Register
   },
   {
-    path:'home', component:Home
+    path:'home', component:Home,
+    canActivate: [AuthGuard]
   }
 ]
 
@@ -110,7 +113,12 @@ const appRoutes : Routes = [
     HttpClientModule, 
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [Configuration, AuthGuard],
+  providers: [Configuration, AuthGuard, AuthService, 
+    {
+    provide: HTTP_INTERCEPTORS,
+    useClass: TokenInterceptor,
+    multi: true
+ }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

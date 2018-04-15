@@ -22,6 +22,31 @@ export class SearchService{
         .set('to', searchRequest.to)
         .set('type', searchRequest.type)
         .set('connectionId', searchRequest.connectionId); 
-        return this.http.get<StreamEvent[]>(this.baseApiAddres+ '/' + searchRequest.streamId, {params : params});
+        const headers = new HttpHeaders({'Authorization':'Bearer '+ localStorage.getItem('auth_token')});
+        return this.http.get<StreamEvent[]>(this.baseApiAddres+ '/' + searchRequest.streamId, {params : params, headers:headers});
+    }
+
+    searchByNumber(searchRequest: SearchRequest) :Observable<StreamEvent[]>{
+        const params = new HttpParams()
+        .set('data', searchRequest.data)
+        .set('eventNumber', searchRequest.eventNumber)
+        .set('from', searchRequest.from)
+        .set('to', searchRequest.to)
+        .set('type', searchRequest.type)
+        .set('connectionId', searchRequest.connectionId); 
+        const headers = new HttpHeaders({'Authorization':'Bearer '+ localStorage.getItem('auth_token')});
+        return this.http.get<StreamEvent[]>(this.baseApiAddres + '/' + searchRequest.streamId + '/' +  + searchRequest.eventNumber, {params : params, headers:headers});
+    }
+
+    searchAllEvents(searchRequest: SearchRequest) :Observable<StreamEvent[]>{
+        const params = new HttpParams()
+        .set('data', searchRequest.data)
+        .set('eventNumber', searchRequest.eventNumber)
+        .set('from', searchRequest.from)
+        .set('to', searchRequest.to)
+        .set('type', searchRequest.type)
+        .set('connectionId', searchRequest.connectionId); 
+        const headers = new HttpHeaders({'Authorization':'Bearer '+ localStorage.getItem('auth_token')});
+        return this.http.get<StreamEvent[]>(this.baseApiAddres + '/allevents', {params : params, headers:headers});
     }
 }

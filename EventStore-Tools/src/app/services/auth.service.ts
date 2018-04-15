@@ -6,6 +6,7 @@ import { AuthResult } from '../models/auth.result.model';
 import { Observable } from 'rxjs/Observable';
 import { ValidationErrors } from '@angular/forms';
 import { User } from '../models/user.model';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthService{
@@ -17,6 +18,7 @@ export class AuthService{
         this.loggedIn = !!localStorage.getItem('auth_token');
         this.baseApiAddres = _configuration.ServerWithApiUrl + '/auth';
     }
+     
     private baseApiAddres : string;
 
     register(login: string, password:string):Observable<boolean>{
@@ -30,11 +32,21 @@ export class AuthService{
         return this.http.post<AuthResult>(this.baseApiAddres + '/login', body, { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) })
         .map(res => 
             {
+                console.info('Yser login result ' + res.token);                
                 localStorage.setItem('auth_token', res.token);
                 this.loggedIn = true;
+                console.info(' this.loggedIn' +  this.loggedIn);  
                 this._authNavStatusSource.next(true);
                 return true;
             });
+    }
+
+    getToken(){
+        return localStorage.getItem('auth_token');
+    }
+
+    setLogginIn(logged:boolean){
+        this.loggedIn = logged;
     }
 
     logout() {
@@ -44,7 +56,7 @@ export class AuthService{
       }
     
       isLoggedIn() {
-        console.info(this.loggedIn);
+        console.info('is logged? ' + this.loggedIn);
         return this.loggedIn;
       }
 }

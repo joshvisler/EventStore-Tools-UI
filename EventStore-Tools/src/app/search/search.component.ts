@@ -9,6 +9,7 @@ import { Observable } from 'rxjs/Observable';
 import { Configuration } from '../app.constants';
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/take'
+import 'rxjs/add/observable/of';
 import { Connection } from '../models/connection.model';
 import { ConnectionService } from '../services/connection.service';
 
@@ -36,6 +37,7 @@ import { ConnectionService } from '../services/connection.service';
     displayedColumns = ['streamId', 'dateCreated', 'type', 'eventNumber', 'data'];
     connections:Connection[];
     selectedValue:string;
+    searchResult:StreamEvent[];
 
     constructor(private searchService : SearchService, private connectionService:ConnectionService){}
     @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -49,7 +51,7 @@ import { ConnectionService } from '../services/connection.service';
     }
 
     ngAfterViewInit() {
-      this.dataSource.paginator = this.paginator;
+     // this.dataSource.paginator = this.paginator;
     }
 
     ngOnInit() {
@@ -61,41 +63,61 @@ import { ConnectionService } from '../services/connection.service';
       this.paginator.pageIndex = 0;
       this.dataSource.connect().subscribe(res=>
         {
-          this.length = 10;
+         // this.length = 10;
         });
     }
 
     handlePaginator(pageEvent: PageEvent) {
       this.paginatorOutput = pageEvent;
-      this.search();
+      this.dataSource = new UserDataSource(this.searchService, this.paginator, this.searchResult);
     }
 
     search(){
-      this.dataSource = new UserDataSource(this.searchService, this.paginator, new SearchRequest(this.connectionId, this.streamId, this.type, this.eventNumber, this.data, this.from, this.to));
+        let searchRequest = new SearchRequest(this.connectionId, this.streamId, this.type, this.eventNumber, this.data, this.from, this.to);
+        if(searchRequest.eventNumber != null && searchRequest.eventNumber != '')
+        {
+          return this.searchService.searchByNumber(searchRequest).subscribe(res=>
+            {
+              this.searchResult = res;
+              this.dataSource = new UserDataSource(this.searchService, this.paginator, this.searchResult);
+            });
+        }
+        else if(searchRequest.streamId == null && searchRequest.streamId == '')
+        {
+          return this.searchService.searchAllEvents(searchRequest).subscribe(res=>
+            {
+              this.searchResult = res;
+              this.dataSource = new UserDataSource(this.searchService, this.paginator, this.searchResult);
+            });
+        }
+
+        return this.searchService.search(searchRequest).subscribe(res=>
+          {
+            this.searchResult = res;
+
+            console.log(this.searchResult);
+            this.dataSource = new UserDataSource(this.searchService, this.paginator, this.searchResult);
+          });
     }
   }
 
   export class UserDataSource extends DataSource<any> {
-      constructor(private searchService: SearchService,private _paginator: MatPaginator, private searchRequest:SearchRequest) {
+      constructor(private searchService: SearchService,private _paginator: MatPaginator, private events:StreamEvent[]/*private searchRequest:SearchRequest*/) {
         super();
       }
 
       count:number;
 
       connect(): Observable<StreamEvent[]> {
-        return this.searchService.search(this.searchRequest).map(res=>
-          {
-            const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
-            console.info(startIndex, this._paginator.pageSize);
-            this._paginator._length = res.length;
-            return res.slice(startIndex, startIndex+this._paginator.pageSize);
-          });
-      }
 
-      setSearchRequest(request:SearchRequest){
-        this.searchRequest = request;
+        return Observable.of(this.events).map(res=>
+              {
+                const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
+                console.info(startIndex, this._paginator.pageSize);
+                this._paginator._length = res.length;
+                return res.slice(startIndex, startIndex+this._paginator.pageSize);
+              });
       }
-
     
       disconnect() {}
     }
