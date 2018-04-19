@@ -1,0 +1,56 @@
+<div class="search-space">
+    <mat-card class="z-depth search-card">
+        <form class="example-form">
+            <mat-form-field class="input-text connectionstring">
+                <mat-select placeholder="Connection" [(ngModel)]="connectionId" name="connection" (change)="onChange(connectionId)">
+                  <mat-option *ngFor="let connection of connections" [value]="connection.connectionId">
+                    {{ connection.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            <button mat-raised-button color="primary" class="confirm" (click)="search()">Search</button>
+          </form>
+
+          <mat-table #table [dataSource]="dataSource">
+
+            <ng-container matColumnDef="Date">
+            <mat-header-cell *matHeaderCellDef> date </mat-header-cell>
+            <mat-cell *matCellDef="let event"> {{event.date}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Type">
+                <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
+                <mat-cell *matCellDef="let event"> {{event.Type}} </mat-cell>
+            </ng-container>
+        
+            <ng-container matColumnDef="ExecutedDate">
+            <mat-header-cell *matHeaderCellDef> ExecutedDate </mat-header-cell>
+            <mat-cell *matCellDef="let event"> {{event.ExecutedDate}} </mat-cell>
+            </ng-container>
+        
+            <ng-container matColumnDef="BackupPath">
+            <mat-header-cell *matHeaderCellDef> BackupPath </mat-header-cell>
+            <mat-cell *matCellDef="let event"> {{event.BackupPath}} </mat-cell>
+            </ng-container>
+        
+                        
+            <ng-container matColumnDef="Status">
+                <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+                <mat-cell *matCellDef="let event"> {{event.Status}} </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        
+        </mat-table>
+
+        <mat-paginator #paginator
+            [length]="lenght"
+            [pageSize]="10"
+            [pageSizeOptions]="[5, 10, 25, 100]"
+            showFirstLastButtons
+            (page)="handlePaginator($event)">
+        </mat-paginator>
+         
+     </mat-card>
+</div>
