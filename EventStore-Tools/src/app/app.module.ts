@@ -51,6 +51,7 @@ import { Search } from './search/search.component';
 import { AuthService } from './services/auth.service';
 import { TokenInterceptor } from './services/refreshtoken.inspector';
 import { Backups } from './backups/backups.component';
+import { Restors } from './restores/restore.component';
 
 const appRoutes : Routes = [
   {
@@ -61,11 +62,11 @@ const appRoutes : Routes = [
   },
   {
     path:'home', component:Home,
-    //canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
   },
   {
     path:'', component:Home,
-    //canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
   }
 ]
 
@@ -76,7 +77,8 @@ const appRoutes : Routes = [
     Register,
     Home,
     Search,
-    Backups
+    Backups,
+    Restors
   ],
   imports: [
     CdkTableModule,

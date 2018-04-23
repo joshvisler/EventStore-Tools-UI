@@ -9,17 +9,17 @@ import 'rxjs/add/operator/take'
 import 'rxjs/add/observable/of';
 import { Connection } from '../models/connection.model';
 import { ConnectionService } from '../services/connection.service';
-import { Backup } from '../models/backup.model';
-import { BackupsService } from '../services/backups.service';
+import { Restore } from '../models/restore.model';
+import { RestorsService } from '../services/restore.service';
 
 @Component({
-    selector:'backups',
-    templateUrl: './backups.component.html',
-    styleUrls: ['./backups.component.css'],
-    providers: [BackupsService, Configuration, ConnectionService]
+    selector:'restors',
+    templateUrl: './restore.component.html',
+    styleUrls: ['./restore.component.css'],
+    providers: [RestorsService, Configuration, ConnectionService]
 })
 
-  export class Backups {
+  export class Restors {
     userForm: FormGroup;
     connectionId: string = 'a1c47d2c-3127-4352-bde6-5d94de922c5d';
     length = 10;
@@ -27,12 +27,12 @@ import { BackupsService } from '../services/backups.service';
     pageSizeOptions = [5, 10, 25, 100]
     paginatorOutput: PageEvent;
     dataSource= new MatTableDataSource(this.dataSource);
-    displayedColumns = ['date', 'executedDate', 'client', 'status'];
+    displayedColumns = ['date', 'executedDate', 'client', 'status', 'create'];
     connections:Connection[];
     selectedValue:string;
-    backups:Backup[];
+    restors:Restore[];
 
-    constructor(private backupsService : BackupsService, private connectionService:ConnectionService){}
+    constructor(private restorsService : RestorsService, private connectionService:ConnectionService){}
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
     ngAfterViewInit() {
@@ -50,38 +50,39 @@ import { BackupsService } from '../services/backups.service';
 
     handlePaginator(pageEvent: PageEvent) {
       this.paginatorOutput = pageEvent;
-      this.dataSource = this.dataSource = new BackupsDataSource(this.backupsService, this.paginator, this.backups);
+      this.dataSource = this.dataSource = new RestorsDataSource(this.restorsService, this.paginator, this.restors);
     }
 
     onChange(newValue) {
       console.log(newValue);
-      this.backupsService.allBackups(this.connectionId).subscribe(res=>
+      this.restorsService.allRestors(this.connectionId).subscribe(res=>
         {
-          this.backups = res;
-          this.dataSource = new BackupsDataSource(this.backupsService, this.paginator, this.backups);
+          this.restors = res;
+          this.dataSource = new RestorsDataSource(this.restorsService, this.paginator, this.restors);
         });
-  }
+    }
 
-    create(){
-        return this.backupsService.createBackup(this.connectionId).subscribe(res=>
+    create(connectionId:string, backupId:string){
+      console.log(connectionId, backupId);        
+        return this.restorsService.Restore(connectionId, backupId).subscribe(res=>
           {
-            this.backupsService.allBackups(this.connectionId).subscribe(res=>
+            this.restorsService.allRestors(this.connectionId).subscribe(res=>
               {
-                this.backups = res;
-                this.dataSource = new BackupsDataSource(this.backupsService, this.paginator, this.backups);
+                this.restors = res;
+                this.dataSource = new RestorsDataSource(this.restorsService, this.paginator, this.restors);
               });
           });
     }
   }
 
-  export class BackupsDataSource extends DataSource<any> {
-      constructor(private backupService: BackupsService,private _paginator: MatPaginator, private events:Backup[]) {
+  export class RestorsDataSource extends DataSource<any> {
+      constructor(private restorsService: RestorsService,private _paginator: MatPaginator, private events:Restore[]) {
         super();
       }
 
       count:number;
 
-      connect(): Observable<Backup[]> {
+      connect(): Observable<Restore[]> {
 
         return Observable.of(this.events).map(res=>
               {

@@ -4,26 +4,26 @@ import { SearchResult, StreamEvent} from '../models/searchResult.model'
 import { SearchRequest } from '../models/searchRequest.model'
 import { Observable } from 'rxjs/Observable';
 import { Configuration } from '../app.constants';
-import { Backup } from '../models/backup.model';
+import { Restore } from '../models/restore.model';
 
 @Injectable()
-export class BackupsService{
+export class RestorsService{
   
     private baseApiAddres : string;
 
     constructor(private http: HttpClient, private _configuration: Configuration){
-        this.baseApiAddres = _configuration.ServerWithApiUrl + '/backup';
+        this.baseApiAddres = _configuration.ServerWithApiUrl + '/restore';
      }
 
-    allBackups(connectionId : string) :Observable<Backup[]>{
+    allRestors(connectionId : string) :Observable<Restore[]>{
         const params = new HttpParams()
         .set('connectionId', connectionId); 
         const headers = new HttpHeaders({'Authorization':'Bearer '+ localStorage.getItem('auth_token')});
-        return this.http.get<Backup[]>(this.baseApiAddres + '/' + connectionId, {headers:headers});
+        return this.http.get<Restore[]>(this.baseApiAddres + '/' + connectionId, {headers:headers});
     }
 
-    createBackup(connectionId : string) :Observable<Object>{
+    Restore(connectionId : string, backupId:string) :Observable<Object>{
         const headers = new HttpHeaders({'Authorization':'Bearer '+ localStorage.getItem('auth_token')});
-        return this.http.post(this.baseApiAddres + '/' + connectionId, connectionId, { headers:headers});
+        return this.http.post(this.baseApiAddres + '/' + connectionId, backupId, { headers:headers});
     }
 }
