@@ -11,12 +11,13 @@ import { Connection } from '../models/connection.model';
 import { ConnectionService } from '../services/connection.service';
 import { Backup } from '../models/backup.model';
 import { BackupsService } from '../services/backups.service';
+import { RestorsService } from '../services/restore.service';
 
 @Component({
     selector:'backups',
     templateUrl: './backups.component.html',
     styleUrls: ['./backups.component.css'],
-    providers: [BackupsService, Configuration, ConnectionService]
+    providers: [BackupsService, Configuration, ConnectionService, RestorsService]
 })
 
   export class Backups {
@@ -27,12 +28,12 @@ import { BackupsService } from '../services/backups.service';
     pageSizeOptions = [5, 10, 25, 100]
     paginatorOutput: PageEvent;
     dataSource= new MatTableDataSource(this.dataSource);
-    displayedColumns = ['date', 'executedDate', 'client', 'status'];
+    displayedColumns = ['date', 'executedDate', 'client', 'status', 'restore'];
     connections:Connection[];
     selectedValue:string;
     backups:Backup[];
 
-    constructor(private backupsService : BackupsService, private connectionService:ConnectionService){}
+    constructor(private backupsService : BackupsService, private connectionService:ConnectionService, private restorsService:RestorsService){}
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
     ngAfterViewInit() {
@@ -59,6 +60,13 @@ import { BackupsService } from '../services/backups.service';
         {
           this.backups = res;
           this.dataSource = new BackupsDataSource(this.backupsService, this.paginator, this.backups);
+        });
+  }
+
+  createRestore(connectionId:string, backupId:string){
+    console.log(connectionId, backupId);        
+      return this.restorsService.Restore(connectionId, backupId).subscribe(res=>
+        {
         });
   }
 

@@ -48,7 +48,7 @@ export class Register {
         }
 
         if (!hasNumber) {
-            return { invalidPassword: 'Password must contain at least 1 digit characters' };
+            return { invalidPassword: 'Password must contains at least 1 digital' };
         }
 
         if (!hasCapitalLetter) {

@@ -4,7 +4,7 @@
          <img mat-card-image src="../assets/img/eventstore-tools.png">
          <mat-form-field class="input-field">
             <input matInput placeholder="Enter your login" name="login" formControlName="name" required>
-            <mat-error *ngIf="userForm.get('name').getError('minlength') || userForm.get('name').getError('required')">Login must be at least 4 characters</mat-error> 
+            <mat-error *ngIf="userForm.get('name').getError('minlength') || userForm.get('name').getError('required')">Login must contains at least 4 symbols</mat-error> 
             <mat-error *ngIf="userForm.get('name').getError('nameError')">{{userForm.get('name').getError('nameError')}}</mat-error> 
           </mat-form-field>
 

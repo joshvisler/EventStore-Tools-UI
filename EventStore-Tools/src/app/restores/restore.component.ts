@@ -27,7 +27,7 @@ import { RestorsService } from '../services/restore.service';
     pageSizeOptions = [5, 10, 25, 100]
     paginatorOutput: PageEvent;
     dataSource= new MatTableDataSource(this.dataSource);
-    displayedColumns = ['date', 'executedDate', 'client', 'status', 'create'];
+    displayedColumns = ['date', 'executedDate', 'client', 'status'];
     connections:Connection[];
     selectedValue:string;
     restors:Restore[];
@@ -60,6 +60,10 @@ import { RestorsService } from '../services/restore.service';
           this.restors = res;
           this.dataSource = new RestorsDataSource(this.restorsService, this.paginator, this.restors);
         });
+    }
+
+    update(){
+      this.onChange('update data');
     }
 
     create(connectionId:string, backupId:string){

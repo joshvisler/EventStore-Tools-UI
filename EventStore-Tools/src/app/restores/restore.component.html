@@ -8,7 +8,7 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-            <button mat-raised-button color="primary" class="confirm" (click)="create()">Create restore</button>
+            <button mat-raised-button color="primary" class="confirm" (click)="update()">Update</button>
           </form>
           <mat-table #table [dataSource]="dataSource">
             <ng-container matColumnDef="date">
@@ -30,12 +30,6 @@
             <mat-header-cell *matHeaderCellDef> status </mat-header-cell>
             <mat-cell *matCellDef="let event"> {{event.status}} </mat-cell>
             </ng-container>
-
-            <ng-container matColumnDef="create">
-                <mat-header-cell *matHeaderCellDef> create </mat-header-cell>
-                <button mat-raised-button color="primary" class="confirm" (click)="create()">Create restore</button>
-                <mat-cell *matCellDef="let event"><button mat-raised-button color="primary" class="confirm" (click)="create(connectionId, event.backupId)">Restore</button></mat-cell>
-                </ng-container>
 
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
